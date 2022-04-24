@@ -1,0 +1,77 @@
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <input type="text" id="item" name="item">
+  <input type="text" id="store" name="store">
+  <button id="checkin" type="button">
+    check in
+  </button>
+  <button id="checkout" type="button">
+    check out
+  </button>
+
+
+hello
+<script>
+var urlParams = new URLSearchParams(window.location.search);
+$(document).keypress(function(e){
+    if (e.which == 13){
+      item = document.getElementById('item').value
+      store = document.getElementById('store').value
+      console.log('hi!')
+      if(item.length > 1 && store.length > 1) {
+        $("#checkin").click();
+        return
+      }
+      if(item.length > 0 && item[0] != 'I') {
+        document.getElementById('store').value = item
+        document.getElementById('item').value = ''
+      }
+
+    }
+});
+
+q = urlParams.get('q');
+if(q[0] == 'I') {
+  document.getElementById('item').value = q
+  document.getElementById('store').focus();
+} else {
+  document.getElementById('store').value = q
+  document.getElementById('item').focus();
+}
+
+var checkin = document.getElementById("checkin");
+
+checkin.addEventListener("click", checkIn);
+
+function checkIn() {
+
+  console.log("The button has been clicked!");
+  axios({
+  method: 'post',
+  url: 'https://uk7y5eskv4.execute-api.eu-north-1.amazonaws.com/prod/checkin',
+  data: {
+    id: 'IA1',
+    storeId: 'BA001'
+  }
+});
+  document.getElementById('item').value = ''
+
+  document.getElementById('store').value = ''
+}
+
+console.log(urlParams.has('post')); // true
+console.log('q', urlParams.get('q')); // "edit"
+console.log(urlParams.getAll('action')); // ["edit"]
+console.log(urlParams.toString()); // "?post=1234&action=edit"
+console.log(urlParams.append('active', '1'));
+</script>
+</body>
+</html>
